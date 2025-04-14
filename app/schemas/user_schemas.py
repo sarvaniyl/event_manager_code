@@ -27,13 +27,28 @@ class UserBase(BaseModel):
     nickname: Optional[str] = Field(None, min_length=3, pattern=r'^[\w-]+$', example=generate_nickname())
     first_name: Optional[str] = Field(None, example="John")
     last_name: Optional[str] = Field(None, example="Doe")
-    bio: Optional[str] = Field(None, example="Experienced software developer specializing in web applications.",max_length=500)
+    bio: Optional[str] = Field(None, example="Experienced software developer specializing in web applications.", max_length=500)
     profile_picture_url: Optional[str] = Field(None, example="https://example.com/profiles/john.jpg")
-    linkedin_profile_url: Optional[str] =Field(None, example="https://linkedin.com/in/johndoe")
+    linkedin_profile_url: Optional[str] = Field(None, example="https://linkedin.com/in/johndoe")
     github_profile_url: Optional[str] = Field(None, example="https://github.com/johndoe")
-
-    _validate_urls = validator('profile_picture_url', 'linkedin_profile_url', 'github_profile_url', pre=True, allow_reuse=True)(validate_url)
- 
+    
+    @validator('profile_picture_url', 'linkedin_profile_url', 'github_profile_url', pre=True)
+    def validate_url(cls, url: Optional[str]) -> Optional[str]:
+        if url is None:
+            return url
+            
+        # More comprehensive URL validation pattern
+        url_regex = r'^(https?:\/\/)?([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}(\/[a-zA-Z0-9\-._~:/?#[\]@!$&\'()*+,;=]*)?$'
+        
+        if not re.match(url_regex, url):
+            raise ValueError('Invalid URL format. URL must be properly formatted (e.g., https://example.com)')
+            
+        # Ensure URL has http/https scheme
+        if not url.startswith(('http://', 'https://')):
+            url = 'https://' + url
+            
+        return url
+    
     class Config:
         from_attributes = True
 
