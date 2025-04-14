@@ -87,6 +87,7 @@ class UserCreate(UserBase):
 
 class UserUpdate(UserBase):
     email: Optional[EmailStr] = Field(None, example="john.doe@example.com")
+    password: Optional[str] = Field(None, example="NewSecure*5678")
     nickname: Optional[str] = Field(None, min_length=3, pattern=r'^[\w-]+$', example="john_doe123")
     first_name: Optional[str] = Field(None, example="John")
     last_name: Optional[str] = Field(None, example="Doe")
@@ -94,6 +95,33 @@ class UserUpdate(UserBase):
     profile_picture_url: Optional[str] = Field(None, example="https://example.com/profiles/john.jpg")
     linkedin_profile_url: Optional[str] =Field(None, example="https://linkedin.com/in/johndoe")
     github_profile_url: Optional[str] = Field(None, example="https://github.com/johndoe")
+    
+    
+    
+    
+    @validator('password')
+    def password_strength(cls, v):
+        if v is None:
+            return v
+            
+        min_length = 8
+        if len(v) < min_length:
+            raise ValueError(f'Password must be at least {min_length} characters long')
+        
+        if not any(char.isupper() for char in v):
+            raise ValueError('Password must contain at least one uppercase letter')
+            
+        if not any(char.islower() for char in v):
+            raise ValueError('Password must contain at least one lowercase letter')
+            
+        if not any(char.isdigit() for char in v):
+            raise ValueError('Password must contain at least one digit')
+            
+        special_chars = "!@#$%^&*()-_=+[]{}|;:'\",.<>/?"
+        if not any(char in special_chars for char in v):
+            raise ValueError('Password must contain at least one special character')
+            
+        return v
 
     @root_validator(pre=True)
     def check_at_least_one_value(cls, values):

@@ -15,6 +15,7 @@ from uuid import UUID
 from app.services.email_service import EmailService
 from app.models.user_model import UserRole
 import logging
+from pydantic import validator
 
 settings = get_settings()
 logger = logging.getLogger(__name__)
@@ -74,35 +75,13 @@ class UserService:
             logger.error(f"Validation error during user creation: {e}")
             return None
         
-    @validator('password')
-    def password_strength(cls, v):
-        if v is None:
-            return v
-            
-        min_length = 8
-        if len(v) < min_length:
-            raise ValueError(f'Password must be at least {min_length} characters long')
-        
-        if not any(char.isupper() for char in v):
-            raise ValueError('Password must contain at least one uppercase letter')
-            
-        if not any(char.islower() for char in v):
-            raise ValueError('Password must contain at least one lowercase letter')
-            
-        if not any(char.isdigit() for char in v):
-            raise ValueError('Password must contain at least one digit')
-            
-        special_chars = "!@#$%^&*()-_=+[]{}|;:'\",.<>/?"
-        if not any(char in special_chars for char in v):
-            raise ValueError('Password must contain at least one special character')
-            
-        return v
+
 
     @classmethod
     async def update(cls, session: AsyncSession, user_id: UUID, update_data: Dict[str, str]) -> Optional[User]:
         try:
             # validated_data = UserUpdate(**update_data).dict(exclude_unset=True)
-            validated_data = UserUpdate(**update_data).dict(exclude_unset=True)
+            validated_data = UserUpdate(**update_data).model_dump(exclude_unset=True)
             
             # Check if nickname is being updated and if it already exists
             if 'nickname' in validated_data:
