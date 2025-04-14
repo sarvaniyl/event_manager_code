@@ -86,15 +86,15 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: sarvaniyl/event_manager_code:${{ github.sha }} # Uses the Git SHA for tagging
+          tags: sarvani07/event_manager_code:${{ github.sha }} # Uses the Git SHA for tagging
           platforms: linux/amd64,linux/arm64 # Multi-platform support
-          cache-from: type=registry,ref=sarvaniyl/event_manager_code:cache
+          cache-from: type=registry,ref=sarvani07/event_manager_code:cache
           cache-to: type=inline,mode=max
           
       - name: Scan the Docker image
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: 'sarvaniyl/event_manager_code:${{ github.sha }}'
+          image-ref: 'sarvani07/event_manager_code:${{ github.sha }}'
           format: 'table'
           exit-code: '1' # Fail the job if vulnerabilities are found
           ignore-unfixed: true

@@ -6,24 +6,24 @@ This repository contains bug fixes for a user management system, focusing on imp
 
 The following issues have been identified and resolved:
 
-1. [Password Validation](https://github.com/sarvaniyl/event_manager_code/issues/1) - Implemented comprehensive password strength validation with requirements for minimum length, uppercase, lowercase, digits, and special characters.[code](app\schemas\user_schemas.py)
+1. [Password Validation](https://github.com/sarvaniyl/event_manager_code/issues/1) - Implemented comprehensive password strength validation with requirements for minimum length, uppercase, lowercase, digits, and special characters.  [code](app\schemas\user_schemas.py)
 
 
 2. [Username Validation (Nickname)](https://github.com/sarvaniyl/event_manager_code/issues/3) - Added functionality to check for nickname uniqueness during user profile updates to prevent duplicate nicknames.
-[code](app\services\user_service.py)
+ [code](app\services\user_service.py)
 
 
 3. [Password Handling During Updates](https://github.com/sarvaniyl/event_manager_code/issues/5) - Fixed a method call bug in the update service and added password validation to the update schema.
-[code](app\schemas\user_schemas.py)
+ [code](app\schemas\user_schemas.py)
 
-4. [Profile Field Edge Case - URL Validation](https://github.com/sarvaniyl/event_manager_code/issues/9) - Enhanced URL validation with a more comprehensive regex pattern and automatic addition of https scheme when missing.
-[code](app\schemas\user_schemas.py)
+4. [Profile Field Edge Case - URL Validation](https://github.com/sarvaniyl/event_manager_code/issues/9) - Enhanced URL validation with a more comprehensive regex pattern and automatic addition of https scheme when missing.  [code](app\schemas\user_schemas.py)
 
 5. [Profile Field Edge Case - Bio Length](https://github.com/sarvaniyl/event_manager_code/issues/7) - Added validation to ensure bio text doesn't exceed the 500-character database limit.
+ [code](app\schemas\user_schemas.py)
 
 ## Docker Image
 The project image has been deployed to DockerHub and is available at:
-[docker.io/username/user-management-system:latest](https://hub.docker.com/r/username/user-management-system)
+[docker.io/sarvani07/event_manager_code:latest](https://hub.docker.com/repository/docker/sarvani07/event_manager_code/tags)
 
 ## Reflection
 
