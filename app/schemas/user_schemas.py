@@ -27,7 +27,7 @@ class UserBase(BaseModel):
     nickname: Optional[str] = Field(None, min_length=3, pattern=r'^[\w-]+$', example=generate_nickname())
     first_name: Optional[str] = Field(None, example="John")
     last_name: Optional[str] = Field(None, example="Doe")
-    bio: Optional[str] = Field(None, example="Experienced software developer specializing in web applications.")
+    bio: Optional[str] = Field(None, example="Experienced software developer specializing in web applications.",max_length=500)
     profile_picture_url: Optional[str] = Field(None, example="https://example.com/profiles/john.jpg")
     linkedin_profile_url: Optional[str] =Field(None, example="https://linkedin.com/in/johndoe")
     github_profile_url: Optional[str] = Field(None, example="https://github.com/johndoe")
@@ -36,6 +36,14 @@ class UserBase(BaseModel):
  
     class Config:
         from_attributes = True
+
+@validator('bio')
+def validate_bio_length(cls, v):
+    if v is not None and len(v) > 500:
+        raise ValueError('Bio must not exceed 500 characters')
+    return v
+
+
 
 class UserCreate(UserBase):
     email: EmailStr = Field(..., example="john.doe@example.com")
